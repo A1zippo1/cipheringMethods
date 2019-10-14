@@ -1,6 +1,7 @@
 package hacktober2019cipher;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,17 +14,29 @@ public class CaesarCipher {
 
 	public static void main(String[] args) {
 		String encryptedText;
+		Boolean save;
 		Scanner sc = new Scanner(System.in);
+		String fileName = "";
+
 		System.out.println("Enter a text to cipher");
 		String text = sc.nextLine();
 		System.out.println("Enter now the key (number) to cipher the message");
 		int key = sc.nextInt();
-		System.out.println("Encrypted message with key " + key + ":");
+		System.out.println("If you want to save the message to a file, type 'y'");
+		save = sc.next().toLowerCase().charAt(0) == 'y' ? true : false;
+		sc.nextLine();
+		if (save) {
+			System.out.println("Type the name of the file");
+			fileName = sc.nextLine();
+		}
 		encryptedText = encrypt(text, key, true);
+
+		System.out.println("Encrypted message with key " + key + ":");
 		System.out.println(encryptedText);
 		System.out.println("The original message was:");
 		System.out.println(encrypt(encryptedText, key, false));
-		saveToFile(encryptedText);
+		if (save)
+			saveToFile(encryptedText, fileName);
 	}
 
 	public static String encrypt(String text, int key, boolean encrypting) {
@@ -53,19 +66,20 @@ public class CaesarCipher {
 		}
 		return encrypted;
 	}
-	
-	private static void saveToFile(String encryptedText) {
-	 try {
-		Writer writer = new BufferedWriter(new OutputStreamWriter(
-		              new FileOutputStream("encryptedMessage.txt"), "utf-8"));
-		writer.write(encryptedText);
-		writer.close();
-	} catch (UnsupportedEncodingException e) {
-		e.printStackTrace();
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
+
+	private static void saveToFile(String encryptedText, String fileName) {
+		File f = new File(fileName);
+		try {
+			Writer writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(f), "utf-8"));
+			writer.write(encryptedText);
+			writer.close();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
