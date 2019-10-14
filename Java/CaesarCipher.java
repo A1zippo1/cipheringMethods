@@ -1,3 +1,12 @@
+package hacktober2019cipher;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Scanner;
 
 public class CaesarCipher {
@@ -14,6 +23,7 @@ public class CaesarCipher {
 		System.out.println(encryptedText);
 		System.out.println("The original message was:");
 		System.out.println(encrypt(encryptedText, key, false));
+		saveToFile(encryptedText);
 	}
 
 	public static String encrypt(String text, int key, boolean encrypting) {
@@ -42,5 +52,20 @@ public class CaesarCipher {
 			}
 		}
 		return encrypted;
+	}
+	
+	private static void saveToFile(String encryptedText) {
+	 try {
+		Writer writer = new BufferedWriter(new OutputStreamWriter(
+		              new FileOutputStream("encryptedMessage.txt"), "utf-8"));
+		writer.write(encryptedText);
+		writer.close();
+	} catch (UnsupportedEncodingException e) {
+		e.printStackTrace();
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 	}
 }
